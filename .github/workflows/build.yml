@@ -5,6 +5,7 @@ on:
       - master
     tags:
       - r**
+  pull_request:
 jobs:
   build:
     name: Build Toolchain
