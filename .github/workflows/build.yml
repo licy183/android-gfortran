@@ -26,7 +26,7 @@ jobs:
         git config --global color.ui false
         repo init -u https://android.googlesource.com/platform/manifest -b gcc
         repo sync
-        repo forall -c git checkout ndk-r14-release || true
+        repo forall -c git checkout ndk-r15-release || true
         docker run -td --rm -v $(pwd):/root/debugger --name=builder ubuntu:16.04
         _BUILDER="docker exec -t builder"
         $_BUILDER apt update
@@ -78,6 +78,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "*.tar.bz2"
           file_glob: true
-          release_name: "Android NDK toolchain version r14 with gfortran" 
+          release_name: "Android NDK toolchain version r15 with gfortran" 
           tag: ${{ steps.tag.outputs.tag }}
           body: ${{ steps.checksums.outputs.checksums }}
