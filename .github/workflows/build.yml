@@ -26,7 +26,7 @@ jobs:
         git config --global color.ui false
         repo init -u https://android.googlesource.com/platform/manifest -b gcc
         repo sync
-        repo forall -c git checkout ndk-release-r17 || true
+        repo forall -c git checkout ndk-r14-release || true
         docker run -td --rm -v $(pwd):/root/debugger --name=builder ubuntu:16.04
         _BUILDER="docker exec -t builder"
         $_BUILDER apt update
@@ -39,7 +39,10 @@ jobs:
                           export PATH=/root/debugger:$PATH;
                           sed -i 's/c,c++/c,c++,fortran/g' build-gcc.sh;
                           patch -p1 -F 10 < ../../android-gfortran/x86.diff;
-                          ./build.py --host linux;"
+                          ./build.py --host linux --toolchain arm-linux-androideabi;
+                          ./build.py --host linux --toolchain aarch64-linux-android;
+                          ./build.py --host linux --toolchain x86;
+                          ./build.py --host linux --toolchain x86_64;"
     - name: Waiting for debugger
       if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
@@ -78,6 +81,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "*.tar.bz2"
           file_glob: true
-          release_name: "Android NDK toolchain version r17 with gfortran" 
+          release_name: "Android NDK toolchain version r14 with gfortran" 
           tag: ${{ steps.tag.outputs.tag }}
           body: ${{ steps.checksums.outputs.checksums }}
